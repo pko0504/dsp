@@ -1,0 +1,44 @@
+clc; clear;
+
+% Step 2: Enter filter specifications
+Fs = 1000;	% Sampling frequency in Hz
+Wp = 200;	% Passband frequency in Hz (cutoff)
+Ws = 300;	% Stopband frequency in Hz
+Rp = 1;		% Passband ripple (dB)
+Rs = 40;	% Stopband attenuation (dB)
+N = 4;		% Filter order
+% Choose filter type: 'lowpass' or 'highpass'
+filterType = 'lowpass'; % 'lowpass' or 'highpass'
+
+% Step 4: Design the IIR filter
+if strcmp(filterType, 'lowpass')
+    % Low-pass filter (Butterworth design)
+    [b, a] = butter(N, Wp / (Fs / 2), 'low'); % Low-pass filter coefficients
+elseif strcmp(filterType, 'highpass')
+    % High-pass filter (Butterworth design)
+    [b, a] = butter(N, Wp / (Fs / 2), 'high'); % High-pass filter coefficients
+else
+    error('Invalid filter type. Choose either ''lowpass'' or ''highpass''.');
+end
+
+% Step 5: Frequency Response
+[H, F] = freqz(b, a, 512, Fs); % Frequency response of the filter
+
+% Step 6: Plot magnitude and phase response
+figure;
+
+% Magnitude response plot
+subplot(2, 1, 1);
+plot(F, abs(H)); % Magnitude plot
+title('Magnitude Response');
+xlabel('Frequency (Hz)');
+ylabel('Gain');
+grid on;
+
+% Phase response plot
+subplot(2, 1, 2);
+plot(F, angle(H)); % Phase plot
+title('Phase Response');
+xlabel('Frequency (Hz)');
+ylabel('Phase (radians)');
+grid on;

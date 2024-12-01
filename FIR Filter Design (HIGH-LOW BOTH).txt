@@ -1,33 +1,42 @@
-% Simple FIR Filter Design using Window Method (Lowpass or Highpass) 
-
 clc;
-clear;
-
-% Step 2: Enter filter specifications
-Fs = 1000;	% Sampling frequency in Hz
-Wp = 200;		% Passband frequency in Hz
-Ws = 300;	% Stopband frequency in Hz
-N = 20;	% Filter order
-
-% Choose filter type: 'lowpass' or 'highpass' 
-
-filterType = 'lowpass'; % 'lowpass' or 'highpass'
-
-% Step 4: Design the filter
-if strcmp(filterType, 'lowpass')
-    b = fir1(N, Wp / (Fs / 2), 'low', hamming(N+1)); % Low-pass filter
-elseif strcmp(filterType, 'highpass')
-    b = fir1(N, Wp / (Fs / 2), 'high', hamming(N+1)); % High-pass filter 
-end
-
-% Step 5: Frequency Response 
-[H, F] = freqz(b, 1, 512, Fs);
-% Step 6: Plot magnitude and phase 
-subplot(2, 1, 1);
-plot(F, abs(H));	% Magnitude plot 
-title('Magnitude Response'); 
-xlabel('Frequency (Hz)');
-ylabel('Gain (dB)');
-subplot(2, 1, 2);
-plot(F, angle(H));	% Phase plot
-title('Phase Response'); xlabel('Frequency (Hz)'); ylabel('Angle');
+clear all;
+close all;
+n=20;
+fp=300;
+fq=200;
+fs=1000;
+fn=2*fp/fs;
+window=blackman(n+1);
+b=fir1(n,fn,'high',window);
+[H W]=freqz(b,1,128);
+subplot(2,1,1);
+plot(W/pi,abs(H));
+title('mag res of hpf');
+ylabel('gain in db-------->');
+xlabel('normalized frequency------>');
+subplot(2,1,2);
+plot(W/pi,angle(H));
+title('phase res of hpf');
+ylabel('angle-------->');
+xlabel('normalized frequency------>');
+clc;
+clear all;
+close all;
+n=20;
+fp=200;
+fq=300;
+fs=1000;
+fn=2*fp/fs;
+window=blackman(n+1);
+b=fir1(n,fn,window);
+[H W]=freqz(b,1,128);
+subplot(2,1,1);
+plot(W/pi,abs(H));
+title('magnitude respones of lpf');
+ylabel('gain in db');
+xlabel('normalized frequency');
+subplot(2,1,2);
+plot(W/pi,angle(H));
+title('Phase response of lpf');
+ylabel('angle');
+xlabel('normalized frequency');
